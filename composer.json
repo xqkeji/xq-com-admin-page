@@ -26,7 +26,7 @@
             {
                 "cmd":["xqkeji\\composer\\Asset","rmDirs"],
                 "param":[{
-                    "resource/xq-admin-page/"
+                    "resource/xq-admin-page/":"resource/xq-admin-page/"
                 }]
             },
             {
@@ -40,7 +40,7 @@
             {
                 "cmd":["xqkeji\\composer\\Asset","rmDirs"],
                 "param":[{
-                    "resource/xq-admin-page/"
+                    "resource/xq-admin-page/":"resource/xq-admin-page/"
                 }]
             }
         ]
