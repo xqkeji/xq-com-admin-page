@@ -1,0 +1,19 @@
+{
+    "name": "xqkeji/xq-com-admin-page",
+    "description": "新齐通用后台管理页面系统的普通页面的js、css等前端程序的composer包。",
+    "type": "library",
+    "license": "SSPL-1.0",
+    "autoload": {
+        "psr-4": {
+            "xqkeji\\composer\\admin-page\\": ""
+        }
+    },
+    "authors": [
+        {
+            "name": "xqkeji.cn"
+        }
+    ],
+    "extra": {
+        
+    }
+}
