@@ -1,5 +1,5 @@
 /*!
- * xq-admin-page v1.0.4 (https://xqkeji.cn/demo/xq-admin-page)
+ * xq-admin-page v1.0.5 (https://xqkeji.cn/demo/xq-admin-page)
  * Author xqkeji.cn
  * LICENSE SSPL-1.0
  * Copyright 2023 xqkeji.cn
@@ -9,6 +9,9 @@
   // src/ts/xq-option.ts
   var DEFAULT_OPTIONS = {
     tableClass: ".xq-table",
+    orderClass: ".xq-order",
+    orderAscClass: ".xq-order-asc",
+    orderDescClass: ".xq-order-desc",
     dragClass: ".xq-drag",
     checkAllClass: ".xq-table .xq-check-all",
     addBtnClass: ".xq-table .xq-add",
@@ -21,7 +24,8 @@
     authTableClass: ".xq-auth-table",
     authCheckTableClass: ".xq-auth-check-table",
     authCheckRowClass: ".xq-auth-check-row",
-    captchaClass: ".xq-captcha"
+    captchaClass: ".xq-captcha",
+    pageSizeId: "#xq-page-size"
   };
   var tablelistOptions = {};
   var setOption = (options = {}) => {
@@ -70,7 +74,7 @@
   var parents = (element, selector) => {
     const parents2 = [];
     let ancestor = element.parentNode;
-    while (ancestor && ancestor.nodeType === Node.ELEMENT_NODE && ancestor.nodeType !== 3) {
+    while (ancestor && ancestor.nodeType === Node.ELEMENT_NODE) {
       if (ancestor.matches(selector)) {
         parents2.push(ancestor);
       }
@@ -114,6 +118,18 @@
       }
     }
     return object;
+  };
+  var setUrlParam = (url, key, value) => {
+    if (value == void 0 || value == null) {
+      return url;
+    }
+    let re = new RegExp("([?&])" + key + "=.*?(&|$)", "i");
+    let separator = url.indexOf("?") !== -1 ? "&" : "?";
+    if (url.match(re)) {
+      return url.replace(re, "$1" + key + "=" + value + "$2");
+    } else {
+      return url + separator + key + "=" + value;
+    }
   };
 
   // src/ts/xq-add.ts
@@ -1645,10 +1661,92 @@
     }
   };
 
+  // src/ts/xq-order.ts
+  var bindOrder = () => {
+    const table2 = getTable();
+    const thead = table2.querySelector("thead");
+    const orderClass = getOption("orderClass");
+    const orderAscClass = getOption("orderAscClass");
+    const orderDescClass = getOption("orderDescClass");
+    const orderClassStr = orderClass.slice(1);
+    const orderAscClassStr = orderAscClass.slice(1);
+    const orderDescClassStr = orderDescClass.slice(1);
+    const thes = table2.querySelectorAll(orderClass);
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.has("orderby")) {
+      const field = urlParams.get("orderby");
+      const ordertype = urlParams.get("ordertype") ?? 1;
+      const thsort = thead?.querySelector('th[field="' + field + '"]');
+      if (thsort) {
+        thsort.classList.remove(orderClassStr);
+        if (ordertype == 1) {
+          thsort.classList.add(orderAscClassStr);
+        } else {
+          thsort.classList.add(orderDescClassStr);
+        }
+      }
+    }
+    for (const th of thes) {
+      th.addEventListener("click", (event) => {
+        let field = th.getAttribute("field");
+        let type = 0;
+        if (th.classList.contains(orderClassStr)) {
+          th.classList.remove(orderClassStr);
+          th.classList.add(orderAscClassStr);
+          type = 1;
+        } else if (th.classList.contains(orderAscClassStr)) {
+          th.classList.remove(orderAscClassStr);
+          th.classList.add(orderDescClassStr);
+          type = 2;
+        } else if (th.classList.contains(orderDescClassStr)) {
+          th.classList.remove(orderDescClassStr);
+          th.classList.add(orderAscClassStr);
+          type = 1;
+        }
+        let url = window.location.href;
+        url = setUrlParam(url, "orderby", field);
+        switch (type) {
+          case 1:
+            url = setUrlParam(url, "ordertype", 1);
+            break;
+          case 2:
+            url = setUrlParam(url, "ordertype", 2);
+            break;
+          default:
+            url = setUrlParam(url, "ordertype", 1);
+            break;
+        }
+        window.location.href = url;
+      });
+    }
+  };
+
+  // src/ts/xq-page-size.ts
+  var bindPageSize = () => {
+    const pageSizeId = getOption("pageSizeId");
+    const pageSize = document.querySelector(pageSizeId);
+    if (pageSize) {
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.has("page-size")) {
+        const param = urlParams.get("page-size");
+        pageSize.value = param ?? "10";
+      }
+      pageSize.addEventListener("change", (event) => {
+        const target = event.currentTarget;
+        const size = target.value;
+        let url = window.location.href;
+        url = setUrlParam(url, "page-size", size);
+        window.location.href = url;
+      });
+    }
+  };
+
   // src/ts/xq-init.ts
   var init = () => {
     const table2 = getTable();
     if (table2) {
+      bindOrder();
+      bindPageSize();
       const tres = table2.querySelectorAll("tr");
       for (const tr of tres) {
         bindView(tr);
@@ -1681,7 +1779,7 @@
 
 xq-util/dist/index.mjs:
   (*!
-   * xq-util v1.0.3 (http://xqkeji.cn/)
+   * xq-util v1.0.4 (http://xqkeji.cn/)
    * Author xqkeji.cn
    * LICENSE SSPL-1.0
    * Copyright 2023 xqkeji.cn
