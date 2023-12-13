@@ -1,5 +1,5 @@
 /*!
- * xq-admin-page v1.0.5 (https://xqkeji.cn/demo/xq-admin-page)
+ * xq-admin-page v1.0.6 (https://xqkeji.cn/demo/xq-admin-page)
  * Author xqkeji.cn
  * LICENSE SSPL-1.0
  * Copyright 2023 xqkeji.cn
@@ -1671,7 +1671,7 @@
     const orderClassStr = orderClass.slice(1);
     const orderAscClassStr = orderAscClass.slice(1);
     const orderDescClassStr = orderDescClass.slice(1);
-    const thes = table2.querySelectorAll(orderClass);
+    const thes = thead.querySelectorAll(orderClass);
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.has("orderby")) {
       const field = urlParams.get("orderby");
