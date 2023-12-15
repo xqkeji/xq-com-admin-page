@@ -1,5 +1,5 @@
 /*!
- * xq-admin-page v1.0.6 (https://xqkeji.cn/demo/xq-admin-page)
+ * xq-admin-page v1.0.7 (https://xqkeji.cn/demo/xq-admin-page)
  * Author xqkeji.cn
  * LICENSE SSPL-1.0
  * Copyright 2023 xqkeji.cn
@@ -18,6 +18,7 @@
     editBtnClass: ".xq-edit",
     viewBtnClass: ".xq-view",
     deleteBtnClass: ".xq-delete",
+    exportBtnClass: ".xq-export",
     copyBtnClass: ".xq-copy",
     batchBtnClass: ".xq-batch",
     backPageClass: ".xq-backpage",
@@ -1741,6 +1742,35 @@
     }
   };
 
+  // src/ts/xq-export.ts
+  var bindExport = () => {
+    const table2 = getTable();
+    const exportBtnClass = getOption("exportBtnClass");
+    const export_btn = table2.querySelector(exportBtnClass);
+    if (export_btn) {
+      export_btn.addEventListener("click", () => {
+        const url = new URL(window.location.href);
+        let actionUrl = url.origin + url.pathname;
+        actionUrl = actionUrl.slice(0, Math.max(0, actionUrl.lastIndexOf("/")));
+        actionUrl = actionUrl + "/export";
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.size > 0) {
+          actionUrl = actionUrl + "?" + urlParams.toString();
+        }
+        const id = "xq-export-form";
+        let export_form = document.querySelector("#" + id);
+        if (export_form) {
+          export_form.setAttribute("action", actionUrl);
+        } else {
+          const export_form_str = '<form action="' + actionUrl + '" method="post" style="display: none;" id="' + id + '"></form>';
+          append(document.body, export_form_str);
+          export_form = document.querySelector("#" + id);
+        }
+        export_form.submit();
+      });
+    }
+  };
+
   // src/ts/xq-init.ts
   var init = () => {
     const table2 = getTable();
@@ -1758,6 +1788,7 @@
       bindCheckAll();
       bindAdd();
       bindBatch();
+      bindExport();
       bindDrag();
     }
     bindBack();
