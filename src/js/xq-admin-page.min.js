@@ -1,5 +1,5 @@
 /*!
- * xq-admin-page v1.0.8 (https://xqkeji.cn/demo/xq-admin-page)
+ * xq-admin-page v1.0.9 (https://xqkeji.cn/demo/xq-admin-page)
  * Author xqkeji.cn
  * LICENSE SSPL-1.0
  * Copyright 2024 xqkeji.cn
