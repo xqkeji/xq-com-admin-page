@@ -1,8 +1,8 @@
 /*!
- * xq-admin-page v1.0.7 (https://xqkeji.cn/demo/xq-admin-page)
+ * xq-admin-page v1.0.8 (https://xqkeji.cn/demo/xq-admin-page)
  * Author xqkeji.cn
  * LICENSE SSPL-1.0
- * Copyright 2023 xqkeji.cn
+ * Copyright 2024 xqkeji.cn
  */
  "use strict";
 (() => {
@@ -222,8 +222,8 @@
   };
   var build = (options = {}) => {
     setOption2(options);
-    const template2 = getOption2("template");
-    append(document.body, template2);
+    const template3 = getOption2("template");
+    append(document.body, template3);
     const id = getOption2("id");
     const xq_bs_modal = document.querySelector("#" + id);
     if (xq_bs_modal) {
@@ -523,6 +523,69 @@
     }
   };
 
+  // node_modules/xq-mask/dist/index.mjs
+  var template2 = '<div id="xq-bs-mask" class="modal modal-dialog-centered" tabindex="-1"  data-bs-backdrop="static" data-bs-keyboard="false"  aria-hidden="true"><div class="modal-dialog"><div class="modal-content"><div class="modal-body"><div class="overlay"><i class="fa-spin bi bi-arrow-repeat"></i></div></div></div></div></div>';
+  var DEFAULT_OPTIONS3 = {
+    id: "xq-bs-mask",
+    template: template2
+  };
+  var maskOptions = {};
+  var setOption3 = (options = {}) => {
+    maskOptions = Object.assign({}, DEFAULT_OPTIONS3);
+    if (options) {
+      for (const option in options) {
+        if (Object.prototype.hasOwnProperty.call(maskOptions, option)) {
+          maskOptions[option] = options[option];
+        }
+      }
+    }
+  };
+  var getOption3 = (key) => {
+    if (key in maskOptions) {
+      return maskOptions[key];
+    }
+    const id = maskOptions["id"];
+    const modal = document.querySelector("#" + id);
+    if (modal.hasAttribute(key)) {
+      return String(modal.getAttribute(key));
+    }
+    return "";
+  };
+  var xqMaskModal = null;
+  var mask = () => {
+    setOption3({});
+    const template3 = getOption3("template");
+    append(document.body, template3);
+    const id = getOption3("id");
+    const xq_bs_mask = document.querySelector("#" + id);
+    if (xq_bs_mask) {
+      xq_bs_mask.querySelector(".modal-dialog");
+      if (typeof bootstrap !== void 0 && typeof bootstrap.Modal !== void 0) {
+        xqMaskModal = new bootstrap.Modal(xq_bs_mask);
+        xq_bs_mask.addEventListener("hidden.bs.modal", () => {
+          xqMaskModal.dispose();
+          xq_bs_mask.remove();
+        });
+        xqMaskModal.show();
+      } else {
+        console.log("error", "the bootstrap not loaded!");
+      }
+    }
+  };
+  var unMask = () => {
+    if (xqMaskModal) {
+      xqMaskModal.hide();
+    }
+  };
+  var xqMask = () => {
+    mask();
+  };
+  var xqUnMask = () => {
+    unMask();
+  };
+  window.xqMask = xqMask;
+  window.xqUnMask = xqUnMask;
+
   // src/ts/xq-batch.ts
   var bindBatch = () => {
     const batchBtnClass = getOption("batchBtnClass");
@@ -551,6 +614,7 @@
               xqConfirm({
                 content: "\u786E\u5B9A\u8981\u8FDB\u884C\u6279\u91CF\u64CD\u4F5C\u5417\uFF1F",
                 confirm() {
+                  xqMask();
                   fetch(url, {
                     body: jsonData,
                     headers: {
@@ -560,6 +624,7 @@
                   }).then(async (response) => {
                     return response.json();
                   }).then((data) => {
+                    xqUnMask();
                     xqConfirm({
                       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access
                       content: data.message,
@@ -1822,6 +1887,14 @@ xq-confirm/dist/index.mjs:
    * Author xqkeji.cn
    * LICENSE SSPL-1.0
    * Copyright 2023 xqkeji.cn
+   *)
+
+xq-mask/dist/index.mjs:
+  (*!
+   * xq-mask v1.0.1 (https://xqkeji.cn/demo/xq-mask)
+   * Author xqkeji.cn
+   * LICENSE SSPL-1.0
+   * Copyright 2024 xqkeji.cn
    *)
 
 xq-html5sortable/dist/index.mjs:
