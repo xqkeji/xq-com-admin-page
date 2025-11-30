@@ -1,5 +1,5 @@
 /*!
- * xq-admin-page v1.1.1 (https://xqkeji.cn/demo/xq-admin-page)
+ * xq-admin-page v1.1.2 (https://xqkeji.cn/demo/xq-admin-page)
  * Author xqkeji.cn
  * LICENSE SSPL-1.0
  * Copyright 2025 xqkeji.cn
@@ -372,6 +372,9 @@ body {
   .search-form .form-control {
     width: 100% !important; /* 输入框占满父容器 */
     box-sizing: border-box; /* 包含内边距和边框 */
+  }
+  .search-form select.selectpicker {
+    width: 0.5px !important;
   }
   /* 调整搜索按钮高度与输入框匹配 */
   .search-form input[type=submit] {
