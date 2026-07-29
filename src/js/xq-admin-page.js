@@ -1,8 +1,8 @@
 /*!
- * xq-admin-page v1.1.2 (https://xqkeji.cn/demo/xq-admin-page)
+ * xq-admin-page v1.1.3 (https://xqkeji.cn/demo/xq-admin-page)
  * Author xqkeji.cn
  * LICENSE SSPL-1.0
- * Copyright 2025 xqkeji.cn
+ * Copyright 2026 xqkeji.cn
  */
  "use strict";
 (() => {
@@ -1511,7 +1511,7 @@
         handle: ".xq-move",
         placeholder: '<tbody><tr><td colspan="99">&nbsp;</td></tr><tbody>'
       });
-      dragger_table.addEventListener("sortstop", () => {
+      dragger_table.addEventListener("sortupdate", () => {
         const rows = [];
         let rowIndex = 0;
         const tbodies = dragger_table.querySelectorAll("tbody");
@@ -1521,6 +1521,11 @@
           const trId = tr?.getAttribute("id");
           const row = { id: trId, ordernum: rowIndex };
           rows.push(row);
+          const cleanId = trId.startsWith("xq_") ? trId.slice(3) : trId;
+          const ordernumInput = document.getElementById("ordernum_" + cleanId);
+          if (ordernumInput) {
+            ordernumInput.value = String(rowIndex);
+          }
         }
         const pid = dragger_table.getAttribute("pid");
         let url = dragger_table.getAttribute("xq-url");
